@@ -33,7 +33,7 @@ document.addEventListener('keydown', (event) => {
   birdY = birdY <= 26 ? 0 : birdY - 50;
   audioWing.play();
   if (event.keyCode === 13) {
-    start()
+    game()
   }
 });
 
@@ -44,9 +44,9 @@ const pipes = [{
   y: 0
 }];
 
-function start() {
+function game() {
   let bgX = 0;
-  setInterval(() => {
+  bgr = setInterval(() => {
     context.drawImage(background, bgX, 0);
     bgX--
     context.drawImage(background, bgX + background.width, 0);
@@ -57,7 +57,7 @@ function start() {
     }
   }, 48)
 
-  setInterval(() => {
+  enviroment = setInterval(() => {
     cycle = (cycle + 1) % 3;
     let score = 0;
 
@@ -72,7 +72,7 @@ function start() {
       if (pipe.x === 125) {
         pipes.push({
           x: canvas.width,
-          y: Math.floor(1 * pipeUp.height) - pipeUp.height,
+          y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height,
         });
       }
       if (
@@ -81,7 +81,7 @@ function start() {
         (birdY <= pipe.y + pipeUp.height ||
           birdY + bird.height >= pipe.y + gap + pipeBottom.height)
       ) {
-        location.reload();
+        gameOver()
       }
 
       if (birdX > pipe.x) {
@@ -100,7 +100,14 @@ function start() {
   }, 12);
 }
 
+function gameOver() {
+  context.font = 'bold 32px serif';
+  context.textAlign = 'center'
+  context.fillStyle = 'white'
+  context.fillText('You loose.', canvas.width / 2, canvas.height / 2);
+  context.fillText('Press restart in 5 seconds.', canvas.width / 2, canvas.height / 2 + 32);
 
-//! ДЗ сделать счетчик очков(пройденная труба - 1 очко)
-// и анимировать фон
-// звуки на полет и заработанное очко.
+  clearInterval(bgr)
+  clearInterval(enviroment)
+  setTimeout(() => location.reload(), 5000)
+}
