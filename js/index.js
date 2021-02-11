@@ -1,5 +1,7 @@
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
+const audioCoin = document.getElementById('audioCoin');
+const audioWing = document.getElementById('audioWing')
 
 const background = new Image();
 const bird = new Image();
@@ -19,9 +21,16 @@ const gap = 85;
 const birdX = 0;
 let birdY = canvas.height / 2;
 
+const birdWidth = 36;
+const birdHeight = 26;
+
 document.addEventListener('keydown', () => {
   birdY = birdY <= 26 ? 0 : birdY - 50;
+  audioWing.play();
 });
+
+let cycle = 0;
+
 
 const pipes = [{
   x: canvas.width,
@@ -30,10 +39,11 @@ const pipes = [{
 
 //* попробовать сделать чтобы фон двигался
 setInterval(() => {
+  cycle = (cycle + 1) % 3;
+  let score = 0;
+
   context.drawImage(background, 0, 0);
-  context.drawImage(bird, 0, birdY);
-  
-  let score = '';
+  context.drawImage(bird, cycle * birdWidth, 0, birdWidth, birdHeight, birdX, birdY, birdWidth, birdHeight);
 
   pipes.forEach(pipe => {
     context.drawImage(pipeUp, pipe.x, pipe.y);
@@ -57,14 +67,16 @@ setInterval(() => {
     }
 
     if (birdX > pipe.x) {
-      score ++
+      audioCoin.play();
+      score++;
     }
   });
   context.drawImage(scoreBg, canvas.width / 2 - 55, -5);
 
   context.font = 'bold 32px serif';
   context.textAlign = 'center'
-  context.fillText(score, canvas.width / 2, scoreBg.height / 2 + 2);
+  context.fillStyle = 'white'
+  context.fillText(score, canvas.width / 2, scoreBg.height / 2 + 5);
 
   birdY = birdY >= canvas.height - 26 ? canvas.height / 2 : birdY + gravity;
 }, 12);
