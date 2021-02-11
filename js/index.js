@@ -24,13 +24,20 @@ let birdY = canvas.height / 2;
 const birdWidth = 36;
 const birdHeight = 26;
 
-document.addEventListener('keydown', () => {
+  context.font = 'bold 32px serif';
+  context.textAlign = 'center'
+  context.fillStyle = 'Black'
+  context.fillText('Press Enter to start', canvas.width / 2, scoreBg.height / 2 + 5);
+
+document.addEventListener('keydown', (event) => {
   birdY = birdY <= 26 ? 0 : birdY - 50;
   audioWing.play();
+  if (event.keyCode === 13) {
+    start()
+  }
 });
 
 let cycle = 0;
-
 
 const pipes = [{
   x: canvas.width,
@@ -38,48 +45,51 @@ const pipes = [{
 }];
 
 //* попробовать сделать чтобы фон двигался
-setInterval(() => {
-  cycle = (cycle + 1) % 3;
-  let score = 0;
+function start() {
+  setInterval(() => {
+    cycle = (cycle + 1) % 3;
+    let score = 0;
 
-  context.drawImage(background, 0, 0);
-  context.drawImage(bird, cycle * birdWidth, 0, birdWidth, birdHeight, birdX, birdY, birdWidth, birdHeight);
+    context.drawImage(background, 0, 0);
+    context.drawImage(bird, cycle * birdWidth, 0, birdWidth, birdHeight, birdX, birdY, birdWidth, birdHeight);
 
-  pipes.forEach(pipe => {
-    context.drawImage(pipeUp, pipe.x, pipe.y);
-    context.drawImage(pipeBottom, pipe.x, pipe.y + gap + pipeBottom.height);
+    pipes.forEach(pipe => {
+      context.drawImage(pipeUp, pipe.x, pipe.y);
+      context.drawImage(pipeBottom, pipe.x, pipe.y + gap + pipeBottom.height);
 
-    pipe.x--;
+      pipe.x--;
 
-    if (pipe.x === 125) {
-      pipes.push({
-        x: canvas.width,
-        y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height,
-      });
-    }
-    if (
-      birdX + bird.width >= pipe.x &&
-      birdX <= pipe.x + pipeUp.width &&
-      (birdY <= pipe.y + pipeUp.height ||
-        birdY + bird.height >= pipe.y + gap + pipeBottom.height)
-    ) {
-      location.reload();
-    }
+      if (pipe.x === 125) {
+        pipes.push({
+          x: canvas.width,
+          y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height,
+        });
+      }
+      if (
+        birdX + bird.width >= pipe.x &&
+        birdX <= pipe.x + pipeUp.width &&
+        (birdY <= pipe.y + pipeUp.height ||
+          birdY + bird.height >= pipe.y + gap + pipeBottom.height)
+      ) {
+        location.reload();
+      }
 
-    if (birdX > pipe.x) {
-      audioCoin.play();
-      score++;
-    }
-  });
-  context.drawImage(scoreBg, canvas.width / 2 - 55, -5);
+      if (birdX > pipe.x) {
+        audioCoin.play();
+        score++;
+      }
+    });
+    context.drawImage(scoreBg, canvas.width / 2 - 55, -5);
 
-  context.font = 'bold 32px serif';
-  context.textAlign = 'center'
-  context.fillStyle = 'white'
-  context.fillText(score, canvas.width / 2, scoreBg.height / 2 + 5);
+    context.font = 'bold 32px serif';
+    context.textAlign = 'center'
+    context.fillStyle = 'white'
+    context.fillText(score, canvas.width / 2, scoreBg.height / 2 + 5);
 
-  birdY = birdY >= canvas.height - 26 ? canvas.height / 2 : birdY + gravity;
-}, 12);
+    birdY = birdY >= canvas.height - 26 ? canvas.height / 2 : birdY + gravity;
+  }, 12);
+}
+
 
 //! ДЗ сделать счетчик очков(пройденная труба - 1 очко)
 // и анимировать фон
