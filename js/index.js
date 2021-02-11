@@ -5,11 +5,13 @@ const background = new Image();
 const bird = new Image();
 const pipeUp = new Image();
 const pipeBottom = new Image();
+const scoreBg = new Image();
 
 background.src = './img/flappy_bird_bg.png';
 bird.src = './img/flappy_bird_bird.png';
 pipeUp.src = './img/flappy_bird_pipeUp.png';
 pipeBottom.src = './img/flappy_bird_pipeBottom.png';
+scoreBg.src = './img/score-cropped.png';
 
 const gravity = 1.5;
 const gap = 85;
@@ -30,6 +32,8 @@ const pipes = [{
 setInterval(() => {
   context.drawImage(background, 0, 0);
   context.drawImage(bird, 0, birdY);
+  
+  let score = '';
 
   pipes.forEach(pipe => {
     context.drawImage(pipeUp, pipe.x, pipe.y);
@@ -52,10 +56,19 @@ setInterval(() => {
       location.reload();
     }
 
+    if (birdX > pipe.x) {
+      score ++
+    }
   });
+  context.drawImage(scoreBg, canvas.width / 2 - 55, -5);
+
+  context.font = 'bold 32px serif';
+  context.textAlign = 'center'
+  context.fillText(score, canvas.width / 2, scoreBg.height / 2 + 2);
 
   birdY = birdY >= canvas.height - 26 ? canvas.height / 2 : birdY + gravity;
 }, 12);
 
 //! ДЗ сделать счетчик очков(пройденная труба - 1 очко)
+// и анимировать фон
 // звуки на полет и заработанное очко.
