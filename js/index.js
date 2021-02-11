@@ -24,10 +24,10 @@ let birdY = canvas.height / 2;
 const birdWidth = 36;
 const birdHeight = 26;
 
-  context.font = 'bold 32px serif';
-  context.textAlign = 'center'
-  context.fillStyle = 'Black'
-  context.fillText('Press Enter to start', canvas.width / 2, scoreBg.height / 2 + 5);
+context.font = 'bold 32px serif';
+context.textAlign = 'center'
+context.fillStyle = 'Black'
+context.fillText('Press Enter to start', canvas.width / 2, scoreBg.height / 2 + 5);
 
 document.addEventListener('keydown', (event) => {
   birdY = birdY <= 26 ? 0 : birdY - 50;
@@ -44,13 +44,23 @@ const pipes = [{
   y: 0
 }];
 
-//* попробовать сделать чтобы фон двигался
 function start() {
+  let bgX = 0;
+  setInterval(() => {
+    context.drawImage(background, bgX, 0);
+    bgX--
+    context.drawImage(background, bgX + background.width, 0);
+
+    if (Math.abs(bgX) === background.width) {
+      bgX = 0
+      console.log(bgX)
+    }
+  }, 48)
+
   setInterval(() => {
     cycle = (cycle + 1) % 3;
     let score = 0;
 
-    context.drawImage(background, 0, 0);
     context.drawImage(bird, cycle * birdWidth, 0, birdWidth, birdHeight, birdX, birdY, birdWidth, birdHeight);
 
     pipes.forEach(pipe => {
@@ -62,7 +72,7 @@ function start() {
       if (pipe.x === 125) {
         pipes.push({
           x: canvas.width,
-          y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height,
+          y: Math.floor(1 * pipeUp.height) - pipeUp.height,
         });
       }
       if (
