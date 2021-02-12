@@ -78,7 +78,7 @@ function game() {
         });
       }
       if (
-        birdX + bird.width >= pipe.x &&
+        birdX + bird.width / 3 >= pipe.x &&
         birdX <= pipe.x + pipeUp.width &&
         (birdY <= pipe.y + pipeUp.height ||
           birdY + bird.height >= pipe.y + gap + pipeBottom.height)
