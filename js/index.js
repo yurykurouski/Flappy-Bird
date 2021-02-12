@@ -78,7 +78,7 @@ function game() {
         });
       }
       if (
-        birdX + bird.width / 3 >= pipe.x &&
+        birdX + (bird.width / 3) >= pipe.x &&
         birdX <= pipe.x + pipeUp.width &&
         (birdY <= pipe.y + pipeUp.height ||
           birdY + bird.height >= pipe.y + gap + pipeBottom.height)
@@ -90,7 +90,11 @@ function game() {
         audioCoin.play();
         score++;
       }
+      if (birdY + 26 == canvas.height) {
+        gameOver();
+      }
     });
+
     context.drawImage(scoreBg, canvas.width / 2 - 55, -5);
 
     context.font = 'bold 32px serif';
@@ -98,7 +102,9 @@ function game() {
     context.fillStyle = 'white'
     context.fillText(score, canvas.width / 2, scoreBg.height / 2 + 5);
 
-    birdY = birdY >= canvas.height - 26 ? canvas.height / 2 : birdY + gravity;
+    // birdY = birdY >= canvas.height - 26 ? canvas.height / 2 : birdY + gravity;
+    birdY = birdY + gravity
+
   }, 12);
 }
 
