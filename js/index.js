@@ -46,22 +46,24 @@ const pipes = [{
 
 function game() {
   let bgX = 0;
+
   bgr = setInterval(() => {
+    cycle = (cycle + 1) % 3;
+
     context.drawImage(background, bgX, 0);
-    bgX--
+    bgX--;
     context.drawImage(background, bgX + background.width, 0);
+
+    context.drawImage(bird, cycle * birdWidth, 0, birdWidth, birdHeight, birdX, birdY, birdWidth, birdHeight);
 
     if (Math.abs(bgX) === background.width) {
       bgX = 0
-      console.log(bgX)
     }
-  }, 48)
+  }, 48);
 
   enviroment = setInterval(() => {
-    cycle = (cycle + 1) % 3;
-    let score = 0;
 
-    context.drawImage(bird, cycle * birdWidth, 0, birdWidth, birdHeight, birdX, birdY, birdWidth, birdHeight);
+    let score = 0;
 
     pipes.forEach(pipe => {
       context.drawImage(pipeUp, pipe.x, pipe.y);
@@ -101,13 +103,13 @@ function game() {
 }
 
 function gameOver() {
+  clearInterval(bgr);
+  clearInterval(enviroment);
+  setTimeout(() => location.reload(), 5000);
+
   context.font = 'bold 32px serif';
   context.textAlign = 'center'
   context.fillStyle = 'white'
   context.fillText('You loose.', canvas.width / 2, canvas.height / 2);
-  context.fillText('Press restart in 5 seconds.', canvas.width / 2, canvas.height / 2 + 32);
-
-  clearInterval(bgr)
-  clearInterval(enviroment)
-  setTimeout(() => location.reload(), 5000)
+  context.fillText('Restart in 5 seconds.', canvas.width / 2, canvas.height / 2 + 32);
 }
